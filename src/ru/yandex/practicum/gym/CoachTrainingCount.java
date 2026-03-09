@@ -2,7 +2,7 @@ package ru.yandex.practicum.gym;
 
 import ru.yandex.practicum.gym.Coach;
 
-public class CoachTrainingCount {
+public class CoachTrainingCount implements Comparable<CoachTrainingCount>{
     private Coach coach;
     private int count;
 
@@ -11,6 +11,10 @@ public class CoachTrainingCount {
         this.count = count;
     }
 
+    @Override
+    public int compareTo(CoachTrainingCount other) {
+        return Integer.compare(other.count, this.count);
+    }
     public Coach getCoach() {
         return coach;
     }

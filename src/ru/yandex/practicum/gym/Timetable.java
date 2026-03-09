@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Timetable {
 
-    private HashMap<DayOfWeek, TreeMap<TimeOfDay, TrainingSession>>  timetable = new HashMap<>();
+    private HashMap<DayOfWeek, TreeMap<TimeOfDay, TrainingSession>> timetable = new HashMap<>();
 
     public void addNewTrainingSession(TrainingSession trainingSession) {
         DayOfWeek day = trainingSession.getDayOfWeek();
@@ -14,16 +14,24 @@ public class Timetable {
                 timetable.getOrDefault(day, new TreeMap<>());
         dayTraining.put(time, trainingSession);
         timetable.put(day, dayTraining);
-
+        for (Map.Entry<TimeOfDay, TrainingSession> entry : dayTraining.entrySet()) {
+            System.out.println(entry.getValue());
+        }
     }
 
     public Map<TimeOfDay, TrainingSession> getTrainingSessionsForDay(DayOfWeek dayOfWeek) {
-        return timetable.get(dayOfWeek);
+        if (dayOfWeek != null) {
+            return timetable.get(dayOfWeek);
+        }
+        return new HashMap<>();
     }
 
     public TrainingSession getTrainingSessionsForDayAndTime(DayOfWeek dayOfWeek, TimeOfDay timeOfDay) {
         Map<TimeOfDay, TrainingSession> dayTime = timetable.get(dayOfWeek);
-        return dayTime.get(timeOfDay);
+        if (dayTime != null) {
+            return dayTime.get(timeOfDay);
+        }
+        return null;
     }
 
     public List<CoachTrainingCount> getCountByCoaches() {
@@ -39,14 +47,7 @@ public class Timetable {
         for (Map.Entry<Coach, Integer> entry : coachCount.entrySet()) {
             coachTrainingCount.add(new CoachTrainingCount(entry.getKey(), entry.getValue()));
         }
-        // Создаем компаратор для сортировки по убыванию количества тренировок
-        Comparator<CoachTrainingCount> comparator = new Comparator<>() {
-            @Override
-            public int compare(CoachTrainingCount a, CoachTrainingCount b) {
-                return b.getCount() - a.getCount(); // по убыванию
-            }
-        };
-        Collections.sort(coachTrainingCount, comparator);
+        Collections.sort(coachTrainingCount);
 
         return coachTrainingCount;
     }
